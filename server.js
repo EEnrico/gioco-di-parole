@@ -24,6 +24,11 @@ const io = socketIo(server, {
                 return callback(null, true);
             }
 
+            // Permetti domini Render.com (per deployment)
+            if (origin.includes('.onrender.com')) {
+                return callback(null, true);
+            }
+
             // Controlla lista origini permesse
             if (allowedOrigins.includes(origin)) {
                 return callback(null, true);
