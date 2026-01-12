@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Gioco di Parole - Multiplayer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Toggle Debug Button -->
+    <button id="debug-toggle" class="debug-toggle" onclick="toggleDebug()">
+        🔧 Debug
+    </button>
+
+    <!-- Debug Panel (nascosto di default) -->
+    <div id="debug-panel" class="debug-panel" style="display: none;">
+        <h4>🔧 Debug Info</h4>
+        <div>Socket ID: <span id="socket-id">-</span></div>
+        <div>Game ID: <span id="game-id">-</span></div>
+        <div>Status: <span id="game-status">-</span></div>
+        <div>Players: <span id="player-count">0</span></div>
+        <h4 style="margin-top: 10px;">📝 Log:</h4>
+        <div id="debug-log"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 Gioco di Parole</h1>
+            <div class="connection-status" id="connection-status">
+                <span id="connection-text">⚪ Connessione...</span>
+            </div>
+        </div>
+
+        <!-- Game Info -->
+        <div class="game-info">
+            <div class="info-box">
+                <strong>Turno:</strong> <span id="current-turn">-</span>
+            </div>
+            <div class="info-box">
+                <strong>Mazzo:</strong> <span id="deck-count">-</span> carte
+            </div>
+            <div class="info-box">
+                <strong>Modalità:</strong> <span id="game-mode">-</span>
+            </div>
+            <div class="info-box timer-box" id="timer-box" style="display: none;">
+                <strong>⏱️ Timer:</strong> <span id="timer-display" class="timer-display">-</span>
+            </div>
+        </div>
+
+        <!-- Players -->
+        <div class="players-section">
+            <h3>👥 Giocatori</h3>
+            <div class="players-list" id="players-list">
+                <!-- Giocatori verranno aggiunti qui -->
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-area">
+            <h3>🎯 Tavolo</h3>
+            <div class="table-cards" id="table-cards">
+                <span class="empty-message">Nessuna carta sul tavolo</span>
+            </div>
+        </div>
+
+        <!-- Hand -->
+        <div class="hand-area">
+            <h3>🃏 La tua mano</h3>
+            <div class="player-hand" id="player-hand">
+                <span class="empty-message">Nessuna carta in mano</span>
+            </div>
+            <div class="mobile-hint" style="text-align: center; opacity: 0.7; font-size: 0.9rem; margin-top: 10px; display: none;">
+                💡 Tocca per selezionare, swipe up per giocare
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn" id="start-btn" onclick="startGame()" style="display: none;">
+                Inizia Partita
+            </button>
+            <button class="btn" id="play-btn" onclick="playSelectedCard()" disabled>
+                Gioca Carta
+            </button>
+            <button class="btn btn-secondary" id="bluff-btn" onclick="callBluff()" disabled>
+                Chiama Bluff
+            </button>
+            <button class="btn btn-warning" onclick="requestState()">
+                🔄 Aggiorna
+            </button>
+        </div>
+
+        <!-- Power-ups (se abilitati) -->
+        <div class="powerups-section" id="powerups-section" style="display: none;">
+            <h3>⚡ Power-Ups</h3>
+            <div class="powerups-container">
+                <button class="powerup-btn" onclick="usePowerUp('doublePoints')" data-powerup="doublePoints">
+                    <span class="powerup-icon">x2</span>
+                    <span class="powerup-name">Punti x2</span>
+                    <span class="powerup-count" id="doublePoints-count">1</span>
+                </button>
+                <button class="powerup-btn" onclick="usePowerUp('skipTurn')" data-powerup="skipTurn">
+                    <span class="powerup-icon">⏭️</span>
+                    <span class="powerup-name">Salta</span>
+                    <span class="powerup-count" id="skipTurn-count">1</span>
+                </button>
+                <button class="powerup-btn" onclick="usePowerUp('revealCard')" data-powerup="revealCard">
+                    <span class="powerup-icon">👁️</span>
+                    <span class="powerup-name">Rivela</span>
+                    <span class="powerup-count" id="revealCard-count">1</span>
+                </button>
+                <button class="powerup-btn" onclick="usePowerUp('extraDraw')" data-powerup="extraDraw">
+                    <span class="powerup-icon">+1</span>
+                    <span class="powerup-name">Pesca</span>
+                    <span class="powerup-count" id="extraDraw-count">2</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="chat-section">
+            <h3>💬 Chat</h3>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chat-input" 
+                       placeholder="Scrivi un messaggio..." 
+                       onkeypress="if(event.key === 'Enter') sendChat()">
+                <button class="btn btn-small" onclick="sendChat()">Invia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Modal -->
+    <div class="modal show" id="start-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">🎮 Benvenuto nel Gioco di Parole!</h2>
+            
+            <div class="form-group">
+                <label>Il tuo nome:</label>
+                <input type="text" class="modal-input" id="player-name" 
+                       placeholder="Inserisci il tuo nome" value="">
+            </div>
+
+            <div class="form-group">
+                <label>Scegli la modalità di gioco:</label>
+                <div class="game-modes">
+                    <div class="mode-card selected" data-mode="classic" onclick="selectMode(this)">
+                        <div class="mode-icon">🎯</div>
+                        <div class="mode-title">Classica</div>
+                        <div class="mode-desc">Gioca con calma, senza timer</div>
+                    </div>
+                    <div class="mode-card" data-mode="speed" onclick="selectMode(this)">
+                        <div class="mode-icon">⚡</div>
+                        <div class="mode-title">Veloce</div>
+                        <div class="mode-desc">15 secondi per turno!</div>
+                    </div>
+                    <div class="mode-card" data-mode="battle" onclick="selectMode(this)">
+                        <div class="mode-icon">⚔️</div>
+                        <div class="mode-title">Battaglia</div>
+                        <div class="mode-desc">1v1 con 8 carte e power-up speciali</div>
+                    </div>
+                    <div class="mode-card" data-mode="coop" onclick="selectMode(this)">
+                        <div class="mode-icon">🤝</div>
+                        <div class="mode-title">Cooperativa</div>
+                        <div class="mode-desc">Raggiungete insieme 20 punti!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Opzioni aggiuntive:</label>
+                <div class="settings">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="powerups-setting" checked>
+                        <span>Abilita Power-ups (consigliato per Battaglia)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="createGame()">
+                    🎯 Crea Nuova Partita
+                </button>
+                <button class="btn btn-secondary" onclick="joinGame()">
+                    🔗 Unisciti a Partita
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bluff Modal -->
+    <div class="modal" id="bluff-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">⚔️ Sfida Bluff!</h2>
+            <p id="bluff-message"></p>
+            <div id="bluff-letters" class="bluff-letters"></div>
+            <div id="bluff-validation-message" style="margin: 10px 0; font-weight: bold;"></div>
+            <input type="text" class="modal-input" id="bluff-word" 
+                   placeholder="Inserisci una parola che contenga tutte le lettere" 
+                   style="display: none;">
+            <div class="modal-buttons" id="bluff-modal-buttons">
+                <button class="btn" id="submit-word-btn" onclick="submitWord()" style="display: none;" disabled>
+                    ✅ Conferma Parola
+                </button>
+                <button class="btn btn-secondary" id="admit-bluff-btn" onclick="admitBluff()" style="display: none;">
+                    🏳️ Ammetti Bluff
+                </button>
+                <!-- Nota: bottone chiudi solo per spettatori, nascosto per il difensore -->
+                <button class="btn btn-warning" onclick="closeModal('bluff-modal')" style="display: none;">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal" id="message-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">📢 Messaggio</h2>
+            <p id="message-text"></p>
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('message-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

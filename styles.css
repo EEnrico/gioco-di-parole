@@ -1,0 +1,967 @@
+/* styles.css - Stili del Gioco */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Debug Toggle Button */
+.debug-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 10000;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.debug-toggle:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.05);
+}
+
+/* Debug Panel */
+.debug-panel {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    max-width: 300px;
+    z-index: 9999;
+    border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+.debug-panel h4 {
+    margin-bottom: 8px;
+    color: #4CAF50;
+    font-size: 14px;
+}
+
+#debug-log {
+    max-height: 150px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.debug-line {
+    margin: 2px 0;
+    padding: 2px 5px;
+    border-left: 2px solid #4CAF50;
+    font-size: 11px;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, #fff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.connection-status {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.status-connected {
+    background: rgba(76, 175, 80, 0.3);
+}
+
+.status-disconnected {
+    background: rgba(244, 67, 54, 0.3);
+}
+
+/* Game Info */
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.info-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 12px 20px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.info-box:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Players */
+.players-section {
+    margin-bottom: 20px;
+}
+
+.players-section h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.players-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.player-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+}
+
+.player-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.player-card.current-turn {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.4), rgba(255, 152, 0, 0.4));
+    animation: pulse 2s infinite;
+    border: 2px solid #FFC107;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.player-score {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* Table Area */
+.table-area {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.table-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    min-height: 100px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    align-items: center;
+}
+
+/* Hand Area */
+.hand-area {
+    margin-bottom: 20px;
+}
+
+.player-hand {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 120px;
+    padding: 10px;
+    align-items: center;
+}
+
+.empty-message {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+/* Cards */
+.card {
+    width: 70px;
+    height: 100px;
+    background: white;
+    color: #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
+
+.card:hover {
+    transform: translateY(-5px) rotate(2deg);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card.selected {
+    transform: translateY(-10px) scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    border: 3px solid #FFC107;
+}
+
+.card.touched {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.card.special {
+    background: linear-gradient(135deg, #FFC107, #FF9800);
+    color: white;
+}
+
+.card.joker {
+    background: linear-gradient(135deg, #E91E63, #9C27B0);
+}
+
+/* Buttons */
+.controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #FF5722, #E64A19);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #FFC107, #FF9800);
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* Chat */
+.chat-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    max-height: 150px;
+}
+
+.chat-message {
+    margin-bottom: 5px;
+    padding: 5px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.chat-author {
+    font-weight: bold;
+    color: #FFC107;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.modal.show {
+    display: flex;
+}
+
+/* Modal bluff non chiudibile */
+#bluff-modal {
+    pointer-events: auto;
+}
+
+#bluff-modal .modal-content {
+    pointer-events: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+/* Game Modes */
+.game-modes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.mode-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.mode-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.mode-card.selected {
+    background: rgba(255, 193, 7, 0.2);
+    border-color: #FFC107;
+}
+
+.mode-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.mode-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.mode-desc {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* Settings */
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Timer */
+.timer-box {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.timer-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.timer-warning {
+    color: #FFC107;
+    animation: pulse 1s infinite;
+}
+
+.timer-danger {
+    color: #FF5252;
+    animation: pulse 0.5s infinite;
+}
+
+.my-turn-timer {
+    animation: borderPulse 1s infinite;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+@keyframes borderPulse {
+    0%, 100% { border-color: rgba(255, 255, 255, 0.5); }
+    50% { border-color: rgba(255, 255, 255, 1); }
+}
+
+/* Power-ups */
+.powerups-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.powerups-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.powerup-btn {
+    background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 80px;
+    position: relative;
+}
+
+.powerup-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+}
+
+.powerup-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.powerup-icon {
+    font-size: 1.5rem;
+}
+
+.powerup-name {
+    font-size: 0.8rem;
+}
+
+.powerup-count {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #FFC107;
+    color: #333;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Bluff */
+.bluff-letters {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    letter-spacing: 10px;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+    /* Previeni zoom accidentale */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Area di gioco ottimizzata */
+    .container {
+        padding-bottom: 100px; /* Spazio per controlli fissi */
+    }
+    
+    /* Bottoni sempre visibili e accessibili */
+    .controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.8));
+        padding: 15px 10px;
+        border-radius: 20px 20px 0 0;
+        z-index: 100;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Carte più grandi per tocco */
+    .player-hand {
+        padding-bottom: 20px;
+        min-height: 100px;
+    }
+    
+    .card {
+        width: 60px;
+        height: 85px;
+        font-size: 1.5rem;
+        margin: 5px 3px;
+    }
+    
+    /* Feedback visivo per tocco */
+    .card:active {
+        transform: scale(1.15) !important;
+        z-index: 10;
+    }
+    
+    /* Semplifica layout */
+    .players-list {
+        display: block;
+    }
+    
+    .player-card {
+        margin-bottom: 5px;
+    }
+}
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .game-info {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .info-box {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+    
+    .card {
+        width: 55px;
+        height: 80px;
+        font-size: 1.3rem;
+    }
+    
+    .card:active {
+        transform: scale(1.1);
+    }
+    
+    .game-modes {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .mode-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+    }
+    
+    .mode-icon {
+        font-size: 1.5rem;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 10px;
+        border-radius: 15px 15px 0 0;
+        z-index: 100;
+    }
+    
+    .chat-section {
+        max-height: 200px; /* Limita altezza su mobile */
+        margin-bottom: 100px; /* Spazio per controlli fissi */
+    }
+    
+    .chat-messages {
+        max-height: 100px;
+    }
+    
+    .chat-input-container {
+        flex-direction: row;
+        gap: 5px;
+    }
+    
+    .chat-input {
+        font-size: 16px; /* Previene zoom su iOS */
+    }
+    
+    .debug-panel {
+        max-width: 200px;
+        font-size: 10px;
+        bottom: 70px; /* Sopra i controlli */
+    }
+    
+    .debug-toggle {
+        top: 5px;
+        right: 5px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .player-hand {
+        padding-bottom: 80px; /* Spazio per i controlli fissi */
+    }
+    
+    .table-cards {
+        min-height: 80px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 50px;
+        height: 75px;
+        font-size: 1.2rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .game-info {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+    
+    .info-box {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .card {
+        transition: transform 0.1s;
+    }
+    
+    .card:active {
+        transform: scale(1.15) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .btn {
+        min-height: 44px; /* iOS minimum touch target */
+        min-width: 44px;
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .modal-input {
+        font-size: 16px; /* Previene zoom su iOS */
+        padding: 14px;
+    }
+}
+
+<style>
+/* Aggiungi queste regole CSS al file styles.css */
+
+/* Loading spinner per votazione */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Stile per il modal bluff quando non è chiudibile */
+#bluff-modal.no-close {
+    pointer-events: auto;
+}
+
+#bluff-modal.no-close .modal-content {
+    position: relative;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Evidenzia meglio il messaggio di validazione */
+#bluff-validation-message {
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+#bluff-validation-message:not(:empty) {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Migliora visibilità lettere del tavolo */
+.bluff-letters {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    letter-spacing: 12px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid rgba(255, 193, 7, 0.3);
+}
+
+/* Evidenzia input parola quando è valida */
+#bluff-word:not(:disabled) {
+    border: 2px solid rgba(76, 175, 80, 0.5);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+#bluff-word:disabled {
+    opacity: 0.7;
+}
+
+/* Bottoni del bluff più grandi e chiari */
+#bluff-modal-buttons .btn {
+    min-width: 140px;
+    padding: 14px 24px;
+    font-size: 1.05rem;
+    margin: 5px;
+}
+
+/* Evidenzia bottone ammetti bluff */
+#admit-bluff-btn {
+    background: linear-gradient(135deg, #9E9E9E, #757575);
+}
+
+#admit-bluff-btn:hover {
+    background: linear-gradient(135deg, #757575, #616161);
+}
+
+/* Mobile: bottoni più grandi */
+@media (max-width: 768px) {
+    #bluff-modal-buttons .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .bluff-letters {
+        font-size: 1.4rem;
+        letter-spacing: 8px;
+        padding: 15px;
+    }
+}
+</style>
